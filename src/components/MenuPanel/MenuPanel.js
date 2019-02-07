@@ -2,7 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Spring, animated } from 'react-spring'
-import { Text, breakpoint, springs, theme, unselectable } from '@aragon/ui'
+import {
+  Text,
+  Viewport,
+  breakpoint,
+  springs,
+  theme,
+  unselectable,
+} from '@aragon/ui'
 import memoize from 'lodash.memoize'
 import { appIconUrl } from '../../utils'
 import { AppType, AppsStatusType, DaoAddressType } from '../../prop-types'
@@ -171,7 +178,7 @@ class MenuPanel extends React.PureComponent {
 }
 
 const AnimatedMenuPanel = ({
-  opened,
+  openProgress,
   autoClosing,
   onCloseMenuPanel,
   ...props
@@ -180,7 +187,7 @@ const AnimatedMenuPanel = ({
     <React.Fragment>
       <Spring
         from={{ progress: 0 }}
-        to={{ progress: Number(opened) }}
+        to={{ progress: openProgress }}
         config={springs.lazy}
         immediate={!autoClosing}
         native
@@ -188,6 +195,7 @@ const AnimatedMenuPanel = ({
         {({ progress }) => (
           <Wrap
             style={{
+              pointerEvents: openProgress === 1 ? 'auto' : 'none',
               transform: progress.interpolate(
                 v =>
                   `translate3d(
@@ -201,25 +209,28 @@ const AnimatedMenuPanel = ({
           </Wrap>
         )}
       </Spring>
-      <Overlay opened={opened} onClick={onCloseMenuPanel} />
+      <Viewport>
+        {({ below }) =>
+          below('medium') && (
+            <Overlay opened={!!openProgress} onClick={onCloseMenuPanel} />
+          )
+        }
+      </Viewport>
     </React.Fragment>
   )
+}
+
+AnimatedMenuPanel.propTypes = {
+  openProgress: PropTypes.number.isRequired,
+  autoClosing: PropTypes.bool.isRequired,
+  onCloseMenuPanel: PropTypes.func.isRequired,
 }
 
 const Overlay = styled.div`
   position: absolute;
   z-index: 2;
-  width: 100vw;
+  width: ${({ opened }) => (opened ? '100vw' : '1px')};
   height: 100vh;
-  min-width: 320px;
-  display: ${({ opened }) => (opened ? 'block' : 'none')};
-
-  ${breakpoint(
-    'medium',
-    `
-      display: none;
-    `
-  )};
 `
 
 const Wrap = styled(animated.div)`
