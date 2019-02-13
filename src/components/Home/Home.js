@@ -2,15 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Spring, animated } from 'react-spring'
-import {
-  AppBar,
-  AppView,
-  Text,
-  Viewport,
-  breakpoint,
-  font,
-  theme,
-} from '@aragon/ui'
+import { AppBar, AppView, Text, Viewport, font, theme } from '@aragon/ui'
 import HomeCard from './HomeCard'
 import { lerp } from '../../math-utils'
 import { AppType } from '../../prop-types'
@@ -115,18 +107,22 @@ class Home extends React.Component {
         <AppContent>
           <AppView
             appBar={
-              <AppBar>
-                <AppBarTitle>
-                  <Viewport>
-                    {({ below }) =>
-                      below('medium') && (
-                        <MenuButton onClick={this.handleMenuPanelOpen} />
-                      )
-                    }
-                  </Viewport>
-                  <AppBarLabel>Home</AppBarLabel>
-                </AppBarTitle>
-              </AppBar>
+              <AppBar
+                title={
+                  <React.Fragment>
+                    <Viewport>
+                      {({ below }) =>
+                        below('medium') && (
+                          <StyledMenuButton
+                            onClick={this.handleMenuPanelOpen}
+                          />
+                        )
+                      }
+                    </Viewport>
+                    <Title>Home</Title>
+                  </React.Fragment>
+                }
+              />
             }
           >
             <Spring
@@ -135,7 +131,7 @@ class Home extends React.Component {
             >
               {({ showAppsProgress }) => (
                 <Content>
-                  <Title>
+                  <AppTitle>
                     <Text
                       weight="bold"
                       style={{
@@ -154,7 +150,7 @@ class Home extends React.Component {
                         ? `You are interacting with ${locator.dao}`
                         : 'You are using Aragon 0.6 — Alba'}
                     </Text>
-                  </Title>
+                  </AppTitle>
                   <p>
                     <Text color={theme.textSecondary}>
                       {showApps ? 'What do you want to do?' : 'Loading apps…'}
@@ -190,21 +186,12 @@ class Home extends React.Component {
   }
 }
 
-const AppBarTitle = styled.span`
-  display: flex;
-  align-items: center;
+const StyledMenuButton = styled(MenuButton)`
+  margin-right: 16px;
 `
 
-const AppBarLabel = styled.span`
-  margin-left: 8px;
+const Title = styled.span`
   ${font({ size: 'xxlarge' })};
-
-  ${breakpoint(
-    'medium',
-    `
-      margin-left: 24px;
-    `
-  )};
 `
 
 const Main = styled.div`
@@ -237,7 +224,7 @@ const Content = styled.div`
   text-align: center;
 `
 
-const Title = styled.h1`
+const AppTitle = styled.h1`
   margin-bottom: 30px;
 `
 
