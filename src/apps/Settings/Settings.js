@@ -2,15 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {
+  AppBar,
+  AppView,
   Button,
   DropDown,
   Field,
   TextInput,
   Viewport,
-  breakpoint,
   font,
 } from '@aragon/ui'
-import AppLayout from '../../components/AppLayout/AppLayout'
 import MenuButton from '../../components/MenuPanel/MenuButton'
 import { defaultEthNode, ipfsDefaultConf } from '../../environment'
 import {
@@ -23,11 +23,6 @@ import { AppType, DaoAddressType, EthereumAddressType } from '../../prop-types'
 import DaoSettings from './DaoSettings'
 import Option from './Option'
 import Note from './Note'
-
-const Content = styled.div`
-  max-width: 600px;
-  padding: 30px;
-`
 
 // Only USD for now
 const AVAILABLE_CURRENCIES = ['USD']
@@ -103,18 +98,22 @@ class Settings extends React.Component {
       selectedCurrency,
     } = this.state
     return (
-      <AppLayout
-        title={
-          <AppBarTitle>
-            <Viewport>
-              {({ below }) =>
-                below('medium') && (
-                  <MenuButton onClick={this.handleMenuPanelOpen} />
-                )
-              }
-            </Viewport>
-            <AppBarLabel>Settings</AppBarLabel>
-          </AppBarTitle>
+      <AppView
+        appBar={
+          <AppBar
+            title={
+              <React.Fragment>
+                <Viewport>
+                  {({ below }) =>
+                    below('medium') && (
+                      <StyledMenuButton onClick={this.handleMenuPanelOpen} />
+                    )
+                  }
+                </Viewport>
+                <Title>Settings</Title>
+              </React.Fragment>
+            }
+          />
         }
       >
         <Content>
@@ -186,27 +185,21 @@ class Settings extends React.Component {
             </Note>
           </Option>
         </Content>
-      </AppLayout>
+      </AppView>
     )
   }
 }
 
-const AppBarTitle = styled.span`
-  display: flex;
-  align-items: center;
-  margin-left: -30px;
+const Content = styled.div`
+  max-width: 600px;
 `
 
-const AppBarLabel = styled.span`
-  margin-left: 8px;
-  ${font({ size: 'xxlarge' })};
+const StyledMenuButton = styled(MenuButton)`
+  margin-right: 16px;
+`
 
-  ${breakpoint(
-    'medium',
-    `
-      margin-left: 24px;
-    `
-  )};
+const Title = styled.span`
+  ${font({ size: 'xxlarge' })};
 `
 
 export default Settings
