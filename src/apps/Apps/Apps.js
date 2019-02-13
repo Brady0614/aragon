@@ -1,19 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
 import {
-  Card,
-  Button,
+  AppBar,
+  AppView,
   Badge,
-  Text,
+  Button,
+  Card,
   SafeLink,
-  theme,
-  colors,
-  unselectable,
-  font,
-  breakpoint,
+  Text,
   Viewport,
+  breakpoint,
+  colors,
+  font,
+  theme,
+  unselectable,
 } from '@aragon/ui'
-import AppLayout from '../../components/AppLayout/AppLayout'
 import MenuButton from '../../components/MenuPanel/MenuButton'
 
 import defaultIcon from './icons/default.svg'
@@ -29,27 +30,31 @@ class Apps extends React.Component {
 
   render() {
     return (
-      <AppLayout
-        title={
-          <AppBarTitle>
-            <Viewport>
-              {({ below }) =>
-                below('medium') && (
-                  <MenuButton onClick={this.handleMenuPanelOpen} />
-                )
-              }
-            </Viewport>
-            <AppBarLabel>Apps</AppBarLabel>
-          </AppBarTitle>
-        }
-        endContent={
-          <DevPortalAnchor
-            mode="strong"
-            href="https://hack.aragon.org/"
-            target="_blank"
-          >
-            Create a new app
-          </DevPortalAnchor>
+      <AppView
+        appBar={
+          <AppBar
+            title={
+              <React.Fragment>
+                <Viewport>
+                  {({ below }) =>
+                    below('medium') && (
+                      <StyledMenuButton onClick={this.handleMenuPanelOpen} />
+                    )
+                  }
+                </Viewport>
+                <Title>Apps</Title>
+              </React.Fragment>
+            }
+            endContent={
+              <DevPortalAnchor
+                mode="strong"
+                href="https://hack.aragon.org/"
+                target="_blank"
+              >
+                Create a new app
+              </DevPortalAnchor>
+            }
+          />
         }
       >
         <Content>
@@ -88,27 +93,17 @@ class Apps extends React.Component {
             ))}
           </AppsGrid>
         </Content>
-      </AppLayout>
+      </AppView>
     )
   }
 }
 
-const AppBarTitle = styled.span`
-  display: flex;
-  align-items: center;
-  margin-left: -30px;
+const StyledMenuButton = styled(MenuButton)`
+  margin-right: 16px;
 `
 
-const AppBarLabel = styled.span`
-  margin-left: 8px;
+const Title = styled.span`
   ${font({ size: 'xxlarge' })};
-
-  ${breakpoint(
-    'medium',
-    `
-      margin-left: 24px;
-    `
-  )};
 `
 
 const DevPortalAnchor = styled(Button.Anchor)`
@@ -116,8 +111,6 @@ const DevPortalAnchor = styled(Button.Anchor)`
 `
 
 const Content = styled.div`
-  padding: 30px;
-
   > h1 {
     margin: 30px 0;
     font-weight: 600;
