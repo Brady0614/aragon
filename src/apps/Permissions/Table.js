@@ -1,4 +1,5 @@
-import { TableHeader, TableCell, breakpoint } from '@aragon/ui'
+import React from 'react'
+import { TableHeader, TableCell, Viewport, breakpoint } from '@aragon/ui'
 import styled from 'styled-components'
 
 const StyledTableHeader = styled(TableHeader)`
@@ -8,7 +9,7 @@ const StyledTableHeader = styled(TableHeader)`
   ${breakpoint(
     'medium',
     `
-      padding-left: 21px;
+      padding-left: 20px;
       text-align: unset;
     `
   )}
@@ -39,59 +40,37 @@ const StyledTableCell = styled(TableCell)`
   )}
 `
 
-const FirstTableCell = styled(StyledTableCell)`
-  &&& {
-    border-left-width: 0;
-    border-right-width: 0;
-    :first-child {
-      border-radius: 0;
-    }
-  }
+const FirstTableCell = props => (
+  <Viewport>
+    {({ below }) => (
+      <StyledTableCell
+        {...props}
+        noSideBorders={below('medium')}
+        css={`
+          > div {
+            text-align: left;
+          }
+        `}
+      />
+    )}
+  </Viewport>
+)
 
-  > div {
-    text-align: left;
-  }
-
-  ${breakpoint(
-    'medium',
-    `
-      &&& {
-        border-left-width: 1px;
-        border-right-width: 1px;
-         :first-child {
-          border-radius: 3px;
-        }
-      }
-    `
-  )};
-`
-
-const LastTableCell = styled(StyledTableCell)`
-  &&& {
-    border-left-width: 0;
-    border-right-width: 0;
-    :last-child {
-      border-radius: 0;
-    }
-  }
-
-  > div {
-    text-align: right;
-  }
-
-  ${breakpoint(
-    'medium',
-    `
-      &&& {
-        border-left-width: 1px;
-        border-right-width: 1px;
-         :last-child {
-          border-radius: 3px;
-        }
-      }
-    `
-  )};
-`
+const LastTableCell = props => (
+  <Viewport>
+    {({ below }) => (
+      <StyledTableCell
+        {...props}
+        noSideBorders={below('medium')}
+        css={`
+          > div {
+            text-align: right;
+          }
+        `}
+      />
+    )}
+  </Viewport>
+)
 
 export {
   StyledTableHeader as TableHeader,
